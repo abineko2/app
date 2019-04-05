@@ -10,6 +10,26 @@ module SessionsHelper
       @current_user ||= User.find_by(id:session[:user_id])
     end    
   end
+  
+  
+#渡されたユーザーがログインずみかどうか(true/false)
+def current_user?(user)
+  user==current_user
+end
+
+
+# 記憶しているURL (もしくはデフォルト値) にリダイレクトする
+def redirect_back_or(default)
+  redirect_to(session[:fowording_url]||default)
+  session.delete(:fowording_url)
+end  
+
+#アクセスしようとしたurl記録
+def store_location
+  session[:fowording_url]=request.original_url if request.get?
+end
+  
+  
 #ログアウトする
   def log_out
     session.delete(:user_id)
