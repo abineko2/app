@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :logged_in_user,only:[:index,:edit,:update]
   before_action :collect_user,only:[:edit,:update]
-  before_action :admin_user,only: :destroy
+  before_action :admin_user,only: [:destroy,:edit_basic_info,:update_basic_info]
   
   
   def index
@@ -32,6 +32,20 @@ class UsersController < ApplicationController
     
   end    
   
+  def edit_basic_info
+    @user=User.find(params[:id])
+  end    
+  
+  def update_basic_info
+    @user=User.find(params[:id])
+    if @user.update_attributes(basic_info_params)
+      flash[:success] = "基本情報を更新しました。"
+      redirect_to @user
+    else
+      render 'edit_basic_info'
+    end  
+  end    
+  
   def update
     if @user.update_attributes(user_params)
       flash[:success] = "ユーザー情報更新しました"
@@ -50,7 +64,11 @@ class UsersController < ApplicationController
   
   private
     def user_params
-      params.require(:user).permit(:name,:email,:password,:password_confirmation)
+      params.require(:user).permit(:name,:email,:department,:password,:password_confirmation)
+    end    
+    
+    def basic_info_params
+      params.require(:user).permit(:basic_time,:work_time)
     end    
   #ログイン済みか確認
   
