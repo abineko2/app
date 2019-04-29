@@ -19,6 +19,7 @@
             <td>月の末日:<%=@last_day.to_s(:date) %></td>
         </tr>
     </table>
+    <%=link_to "勤怠を編集",edit_attendances_path(@user,@first_day),class:"btn btn-primary" %>
     <!--------------------------------------------------------->
     <table class="table-bordered table-striped table-condensed">
         <!--rowspan:縦結合、colspan：横結合-->
@@ -61,12 +62,12 @@
                   </td>
                   <td>
                       <% if day.started_at.present? && day.finished_at.present? %>
-                        <%=working_times(day.finished_at,day.started_at) %>
+                        <%=working_times(day.started_at,day.finished_at) %>
                         <% seconds=(day.finished_at-day.started_at).to_i %>
                         <% @total_seconds=@total_seconds.to_i+seconds %>
                       <% end %>
                   </td>
-                  <td></td>
+                  <td><%=day.note %></td>
               </tr>
             <% end %>
         </tbody>
